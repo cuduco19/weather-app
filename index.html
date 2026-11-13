@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--Developer-focused (great for a coding assignment/portfolio)-->
+        <!--<meta name="description" content="This project demonstrates fetching data from a public weather API, handling loading and errors, and rendering results.">-->
+        <!--Developer-focused (great for a coding assignment/portfolio)-->
+        <meta name="description" content="Check real-time weather forecasts for any city worldwide, built with JavaScript and the OpenWeather API.">
+        <title>Weather App</title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="app.js" defer></script>
+    </head>
+    <body>
+        <main class="card">
+            <h1>Weather</h1>
+            <form id="search-form" aria-label="Search weather by city">
+                <input id="city-input" type="text" placeholder="Enter city (e.g., London)" required>
+                <button type="submit">Search</button>
+            </form>
+            <div id="loader" class="hidden">Loading...</div>
+            <div id="error" class="error hidden" role="alert"></div>
+            <section id="weather" class="weather hidden" aria-live="polite">
+                <h2 id="w-city"></h2>
+                <div class="w-main">
+                    <div id="w-temp" class="w-temp"></div>
+                    <div id="w-desc" class="w-desc"></div>
+                </div>
+                <ul class="w-details">
+                    <li id="w-humidity"></li>
+                    <li id="w-wind"></li>
+                </ul>
+            </section>
+        </main>
+    </body>
+</html>
+
