@@ -35,7 +35,7 @@ function kelvinToCelcius(k){
 }
 
 async function fetchWeatherByCity(city) {
-    const url = `${BASE}?q=${encodeURIComponent(city)}&appid=${API_KEY}`;
+    const url = `${BASE}?q=${encodeURIComponent(city)}&units=metric&appid=${API_KEY}`;
 
     // Basic fetch; check response.ok
     const res = await fetch(url);
@@ -52,7 +52,7 @@ async function fetchWeatherByCity(city) {
 function renderWeather(data){
     // OpenWeather returns weather[0].description, main.temp, main.humidity, wind.speed
     wCity.textContent = `${data.name}, ${data.sys?.country || ''}`;
-    wTemp.textContent = `${kelvinToCelcius(data.main.temp)}°C`;
+    wTemp.textContent = `${data.main.temp}°C`;
     wDesc.textContent = data.weather?.[0]?.description || '';
     wHumidity.textContent = `Humidity: ${data.main.humidity}%`;
     wWind.textContent = `Wind: ${data.wind.speed} m/s`;
