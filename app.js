@@ -17,10 +17,17 @@ const wWind = document.getElementById('w-wind');
 const wIcon = document.getElementById('w-icon');
 // Add this with your other DOM hooks at the top
 const unitToggleBtn = document.getElementById('unit-toggle');
+// 1. Add this to your DOM Hooks at the top
+const historyContainer = document.getElementById('search-history');
 
 // State variables to remember the current temperature and unit
 let currentTempC = null;
 let isCelsius = true;
+
+
+// 2. Add this to your App State at the top (loads saved array or starts empty)
+let searchHistory = JSON.parse(localStorage.getItem('weatherHistory')) || [];
+
 
 function showLoading(show = true) {
     loader.classList.toggle('hidden', !show);
@@ -93,6 +100,43 @@ function renderWeather(data){
     weatherSection.classList.remove('hidden');
 }
 
+// 3. Add these two functions with your other functions
+function saveSearchHistory(city) {
+    // Remove the city if it already exists (case-insensitive) so we don't get duplicates
+    searchHistory = searchHistory.filter(
+        (item) => item.toLowerCase() !== city.toLowerCase()
+    );
+
+    // Add the new city to the very beginning of the array
+    searchHistory.unshift(city);
+
+    // Keep only the last 5 searched cities
+    searchHistory = searchHistory.slice(0, 5);
+
+    // Save back to localStorage as a JSON string
+    localStorage.setItem('weatherHistory', JSON.stringify(searchHistory));
+
+    renderSearchHistory();
+}
+
+function renderSearchHistory() {
+    historyContainer.innerHTML = '';
+
+    searchHistory.forEach((city) => {
+        const btn = document.createElement('button');
+        btn.type = 'button'; // Important: prevents accidental form submission behavior
+        btn.className = 'history-btn';
+        btn.textContent = city;
+
+        btn.addEventListener('click', () => {
+            cityInput.value = city;
+            form.dispatchEvent(new Event('submit'));
+        });
+
+        historyContainer.appendChild(btn);
+    });
+}
+
 form.addEventListener('submit', async(e) => {
     e.preventDefault();
     const city = cityInput.value.trim();
@@ -102,6 +146,7 @@ form.addEventListener('submit', async(e) => {
     try{
         const data = await fetchWeatherByCity(city);
         renderWeather(data);
+        saveSearchHistory(data.name); // Uses the official capitalized city name from OpenWeather!
     } catch (err) {
         console.error('Weather fetch error', err);
         showError(err.message || 'Failed to load weather data');
@@ -114,6 +159,9 @@ unitToggleBtn.addEventListener('click', () => {
     isCelsius = !isCelsius;
     updateTempDisplay();
 });
+
+// 5. Render any saved history immediately when the page first loads (put at the bottom of app.js)
+renderSearchHistory();
 
 // Optionally: auto-load weather for an initial city (uncomment to use)
 //(async () => {

@@ -97,3 +97,29 @@ button {
     display: flex;
     gap: 1rem;
 }
+
+
+.history-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+}
+
+.history-list:empty {
+    display: none; /* Hides the container completely when there is no history yet */
+}
+
+.history-btn {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.8rem;
+    background: #f1f5f9;
+    color: var(--text);
+    border: 1px solid #e2e8f0;
+    border-radius: 999px; /* Pill shape */
+    cursor: pointer;
+}
+
+.history-btn:hover {
+    background: #e2e8f0;
+}
