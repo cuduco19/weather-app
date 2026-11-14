@@ -30,9 +30,11 @@ function showError(message){
     weatherSection.classList.add('hidden');
 }
 
+/*
 function kelvinToCelcius(k){
     return (k - 273.15).toFixed(1);
 }
+*/
 
 async function fetchWeatherByCity(city) {
     const url = `${BASE}?q=${encodeURIComponent(city)}&units=metric&appid=${API_KEY}`;
@@ -52,7 +54,7 @@ async function fetchWeatherByCity(city) {
 function renderWeather(data){
     // OpenWeather returns weather[0].description, main.temp, main.humidity, wind.speed
     wCity.textContent = `${data.name}, ${data.sys?.country || ''}`;
-    wTemp.textContent = `${data.main.temp}°C`;
+    wTemp.textContent = `${data.main.temp.toFixed(1)}°C`;
     wDesc.textContent = data.weather?.[0]?.description || '';
     wHumidity.textContent = `Humidity: ${data.main.humidity}%`;
     wWind.textContent = `Wind: ${data.wind.speed} m/s`;
