@@ -15,6 +15,12 @@ const wDesc = document.getElementById('w-desc');
 const wHumidity = document.getElementById('w-humidity');
 const wWind = document.getElementById('w-wind');
 const wIcon = document.getElementById('w-icon');
+// Add this with your other DOM hooks at the top
+const unitToggleBtn = document.getElementById('unit-toggle');
+
+// State variables to remember the current temperature and unit
+let currentTempC = null;
+let isCelsius = true;
 
 function showLoading(show = true) {
     loader.classList.toggle('hidden', !show);
@@ -51,10 +57,25 @@ async function fetchWeatherByCity(city) {
     return res.json();
 }
 
+function updateTempDisplay() {
+    if (currentTempC === null) return;
+
+    if (isCelsius) {
+        wTemp.textContent = `${currentTempC.toFixed(1)}°C`;
+        unitToggleBtn.textContent = '°F';
+    } else {
+        const tempF = (currentTempC * 9) / 5 + 32;
+        wTemp.textContent = `${tempF.toFixed(1)}°F`;
+        unitToggleBtn.textContent = '°C';
+    }
+}
+
 function renderWeather(data){
     // OpenWeather returns weather[0].description, main.temp, main.humidity, wind.speed
     wCity.textContent = `${data.name}, ${data.sys?.country || ''}`;
-    wTemp.textContent = `${data.main.temp.toFixed(1)}°C`;
+    //wTemp.textContent = `${data.main.temp.toFixed(1)}°C`;
+    currentTempC = data.main.temp;
+    updateTempDisplay();
     wDesc.textContent = data.weather?.[0]?.description || '';
     wHumidity.textContent = `Humidity: ${data.main.humidity}%`;
     wWind.textContent = `Wind: ${data.wind.speed} m/s`;
@@ -87,6 +108,11 @@ form.addEventListener('submit', async(e) => {
     } finally {
         showLoading(false);
     }
+});
+
+unitToggleBtn.addEventListener('click', () => {
+    isCelsius = !isCelsius;
+    updateTempDisplay();
 });
 
 // Optionally: auto-load weather for an initial city (uncomment to use)

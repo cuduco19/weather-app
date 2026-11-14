@@ -36,6 +36,7 @@ form {
 }
 input {
     flex: 1;
+    min-width: 0; /* Prevents <input> from overflowing narrow screens */
     padding: 0.6rem 0.9rem;
     border: 1px solid #e6eef6;
 }
@@ -47,6 +48,18 @@ button {
     background: var(--accent);
     color: #fff;
     cursor: pointer;
+}
+
+.unit-btn {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.875rem;
+    background: #e2e8f0;
+    color: var(--text);
+    border-radius: 6px;
+}
+
+.unit-btn:hover {
+    background: #cbd5e1;
 }
 
 .hidden {
