@@ -9,6 +9,7 @@
         <meta name="description" content="Check real-time weather forecasts for any city worldwide, built with JavaScript and the OpenWeather API.">
         <title>Weather App</title>
         <link rel="stylesheet" href="styles.css">
+        <script src="config.js" defer></script>
         <script src="app.js" defer></script>
     </head>
     <body>
@@ -22,6 +23,7 @@
             <div id="error" class="error hidden" role="alert"></div>
             <section id="weather" class="weather hidden" aria-live="polite">
                 <h2 id="w-city"></h2>
+                <img id="w-icon" src="" alt="Weather icon" />
                 <div class="w-main">
                     <div id="w-temp" class="w-temp"></div>
                     <div id="w-desc" class="w-desc"></div>

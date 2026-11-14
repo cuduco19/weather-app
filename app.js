@@ -1,6 +1,6 @@
 // app.js - Weather App
 //const API_KEY = 'YOUR_API_KEY';// <-- Replace with your API key
-const API_KEY = '806fc84f89fc9dec37597293464c65be';
+const API_KEY = CONFIG.API_KEY;
 const BASE ='https://api.openweathermap.org/data/2.5/weather';
 
 const form = document.getElementById('search-form');
@@ -14,11 +14,14 @@ const wTemp = document.getElementById('w-temp');
 const wDesc = document.getElementById('w-desc');
 const wHumidity = document.getElementById('w-humidity');
 const wWind = document.getElementById('w-wind');
+const wIcon = document.getElementById('w-icon');
 
-function showLoading(show = true){
+function showLoading(show = true) {
     loader.classList.toggle('hidden', !show);
-    weatherSection.classList.add('hidden');
-    errorEl.classList.add('hidden');
+    if (show) {
+        weatherSection.classList.add('hidden');
+        errorEl.classList.add('hidden');
+    }
 }
 
 function showError(message){
@@ -53,6 +56,17 @@ function renderWeather(data){
     wDesc.textContent = data.weather?.[0]?.description || '';
     wHumidity.textContent = `Humidity: ${data.main.humidity}%`;
     wWind.textContent = `Wind: ${data.wind.speed} m/s`;
+
+    // Weather Icon
+    const iconCode = data.weather?.[0]?.icon;
+    if (iconCode) {
+        wIcon.src = `https://openweathermap.org/payload/api/media/file/${iconCode}.png`;
+        wIcon.alt = data.weather?.[0]?.description || 'Weather icon';
+        wIcon.classList.remove('hidden');
+    } else {
+        wIcon.classList.add('hidden');
+    }
+
     weatherSection.classList.remove('hidden');
 }
 
@@ -65,7 +79,7 @@ form.addEventListener('submit', async(e) => {
     try{
         const data = await fetchWeatherByCity(city);
         renderWeather(data);
-    } catch (erro) {
+    } catch (err) {
         console.error('Weather fetch error', err);
         showError(err.message || 'Failed to load weather data');
     } finally {
