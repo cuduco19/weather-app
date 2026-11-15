@@ -1,8 +1,7 @@
 // app.js - Weather App
 //const API_KEY = 'YOUR_API_KEY';// <-- Replace with your API key
-const API_KEY = CONFIG.API_KEY;
-const BASE ='https://api.openweathermap.org/data/2.5/weather';
-const FORECAST_BASE = 'https://api.openweathermap.org/data/2.5/forecast';
+const BASE = '/api/weather';
+const FORECAST_BASE = '/api/forecast';
 
 // 1. DOM Hooks
 const form = document.getElementById('search-form');
@@ -52,7 +51,7 @@ function showError(message) {
 
 // 4. API Fetch & Retry Logic
 async function fetchWeatherByCity(city) {
-    const url = `${BASE}?q=${encodeURIComponent(city)}&units=metric&appid=${API_KEY}`;
+    const url = `${BASE}?q=${encodeURIComponent(city)}&units=metric`;
 
     // Basic fetch; check response.ok
     const res = await fetch(url);
@@ -67,7 +66,7 @@ async function fetchWeatherByCity(city) {
 }
 
 async function fetchWeatherByCoords(lat, lon) {
-    const url = `${BASE}?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`;
+    const url = `${BASE}?lat=${lat}&lon=${lon}&units=metric`;
     const res = await fetch(url);
 
     if (!res.ok) {
@@ -78,7 +77,7 @@ async function fetchWeatherByCoords(lat, lon) {
 }
 
 async function fetchForecastByCoords(lat, lon) {
-    const url = `${FORECAST_BASE}?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`;
+    const url = `${FORECAST_BASE}?lat=${lat}&lon=${lon}&units=metric`;
     const res = await fetch(url);
 
     if (!res.ok) {
