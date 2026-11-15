@@ -19,19 +19,15 @@ const wDesc = document.getElementById('w-desc');
 const wHumidity = document.getElementById('w-humidity');
 const wWind = document.getElementById('w-wind');
 const wIcon = document.getElementById('w-icon');
-// Add this with your other DOM hooks at the top
 const unitToggleBtn = document.getElementById('unit-toggle');
-// I (search history feature)- Add this to your DOM Hooks at the top
 const historyContainer = document.getElementById('search-history');
 
 const geoBtn = document.getElementById('geo-btn');
 
 // 2. App State
-// State variables to remember the current temperature and unit
 let currentTempC = null;
 let isCelsius = true;
 let currentForecastList = [];
-// (search history feature) II. Add this to your App State at the top (loads saved array or starts empty)
 let searchHistory = JSON.parse(localStorage.getItem('weatherHistory')) || [];
 
 
@@ -52,13 +48,8 @@ function showError(message) {
     forecastSection.classList.add('hidden');
 }
 
-/*
-function kelvinToCelcius(k){
-    return (k - 273.15).toFixed(1);
-}
-*/
 
-// (history feature) IV 4. API Fetch & Retry Logic
+// 4. API Fetch & Retry Logic
 async function fetchWeatherByCity(city) {
     const url = `${BASE}?q=${encodeURIComponent(city)}&units=metric&appid=${API_KEY}`;
 
@@ -79,19 +70,6 @@ async function fetchWeatherByCoords(lat, lon) {
     const res = await fetch(url);
 
     if (!res.ok) {
-        throw new Error(`Server error: ${res.status}`);
-    }
-
-    return res.json();
-}
-
-async function fetchForecastByCity(city) {
-    const url = `${FORECAST_BASE}?q=${encodeURIComponent(city)}&units=metric&appid=${API_KEY}`;
-    const res = await fetch(url);
-    
-    // Basic fetch; check response.ok
-    if (!res.ok) {
-        if (res.status === 404) throw new Error('City not found');
         throw new Error(`Server error: ${res.status}`);
     }
 
@@ -212,7 +190,6 @@ function renderForecast() {
 
 
 // 6. Search History Helpers
-// (searc history feature )III. Add these two functions with your other functions
 function saveSearchHistory(data) {
 
      // Combine city and country code (e.g., "San Cristóbal, DO")
@@ -270,6 +247,7 @@ function renderSearchHistory() {
     });
 }
 
+// 7. Weather Loaders & Event Listeners
 async function loadWeatherByCoords(lat, lon) {
     showLoading(true);
 
@@ -291,7 +269,6 @@ async function loadWeatherByCoords(lat, lon) {
     }
 }
 
-// (Search history) IV. Inside your form 'submit' listener, call saveSearchHistory(data.name) right after renderWeather(data):
 // 7. Event Listeners & Init
 form.addEventListener('submit', async(e) => {
     e.preventDefault();
@@ -300,21 +277,6 @@ form.addEventListener('submit', async(e) => {
     showLoading(true);
 
     try{
-        /*
-        //const data = await fetchWeatherByCity(city);
-        const [weatherData, forecastData] = await Promise.all([
-            fetchWithRetry(() => fetchWeatherByCity(city)),
-            fetchWithRetry(() => fetchForecastByCity(city))
-        ]);
-
-        //renderWeather(data);
-        renderWeather(weatherData);
-        currentForecastList = extractDailyForecasts(forecastData.list);
-        renderForecast();
-        //saveSearchHistory(data.name); // Uses the official capitalized city name from OpenWeather!
-        //saveSearchHistory(weatherData.name); // Uses the official capitalized city name from OpenWeather!
-        saveSearchHistory(weatherData); // Pass the whole data object instead of just weatherData.name
-         */
          // 1. Get initial city data (including its exact lat & lon)
         const weatherData = await fetchWithRetry(() => fetchWeatherByCity(city));
         renderWeather(weatherData);
@@ -369,15 +331,8 @@ geoBtn.addEventListener('click', () => {
     );
 });
 
-
-// (search histor feature )V. Render any saved history immediately when the page first loads (put at the bottom of app.js)
+// 8. Initial Load
 renderSearchHistory();
-
-// Optionally: auto-load weather for an initial city (uncomment to use)
-//(async () => {
-//    cityInput.value = 'London';
-//    form.dispatchEvent(new Event('submit'));
-//})();
 
 (() => {
     if (searchHistory.length > 0 && typeof searchHistory[0] === 'object') {
