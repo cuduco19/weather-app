@@ -42,6 +42,7 @@ input {
     border: 1px solid #e6eef6;
 }
 
+
 button {
     padding: 0.6rem 0.9rem;
     border-radius: 8px;
@@ -49,6 +50,18 @@ button {
     background: var(--accent);
     color: #fff;
     cursor: pointer;
+    flex-shrink: 0; /* Keeps buttons from getting squished on narrow screens */
+}
+
+.geo-btn {
+    background: #f1f5f9;
+    color: var(--text);
+    border: 1px solid #e2e8f0;
+    padding: 0.6rem 0.75rem;
+}
+
+.geo-btn:hover {
+    background: #e2e8f0;
 }
 
 .unit-btn {

@@ -24,6 +24,8 @@ const unitToggleBtn = document.getElementById('unit-toggle');
 // I (search history feature)- Add this to your DOM Hooks at the top
 const historyContainer = document.getElementById('search-history');
 
+const geoBtn = document.getElementById('geo-btn');
+
 // 2. App State
 // State variables to remember the current temperature and unit
 let currentTempC = null;
@@ -337,6 +339,36 @@ unitToggleBtn.addEventListener('click', () => {
     updateTempDisplay();
     renderForecast();
 });
+
+geoBtn.addEventListener('click', () => {
+    if (!navigator.geolocation) {
+        showError('Geolocation is not supported by your browser.');
+        return;
+    }
+
+    showLoading(true);
+    geoBtn.disabled = true; // Prevents double-clicking while waiting for GPS
+
+    navigator.geolocation.getCurrentPosition(
+        async (position) => {
+            const { latitude, longitude } = position.coords;
+            cityInput.value = ''; // Clear any old city text from the input
+            await loadWeatherByCoords(latitude, longitude);
+            geoBtn.disabled = false;
+        },
+        (err) => {
+            geoBtn.disabled = false;
+            if (err.code === err.PERMISSION_DENIED) {
+                showError('Location access denied. Please enable location permissions.');
+            } else {
+                showError('Unable to retrieve your location.');
+            }
+            showLoading(false);
+        },
+        { timeout: 10000 } // Gives up cleanly after 10 seconds if GPS hangs
+    );
+});
+
 
 // (search histor feature )V. Render any saved history immediately when the page first loads (put at the bottom of app.js)
 renderSearchHistory();
