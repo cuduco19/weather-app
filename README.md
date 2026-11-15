@@ -13,6 +13,28 @@ A responsive, full-stack weather dashboard built with **HTML5, CSS3, Vanilla Jav
 - **Resilient Fetch with Retry Backoff:** Automatically retries transient network or server failures with increasing backoff delays while failing fast on invalid city queries (`404`) or authentication errors (`401`).
 - **Responsive & Accessible UI:** Built with semantic HTML, ARIA live regions for screen readers, and flexible CSS layouts that adapt cleanly across desktop and narrow mobile viewports.
 
+## 🏗️ Architecture & Request Flow
+
+To keep the OpenWeatherMap API key completely hidden from the browser, the app uses a lightweight **Node.js proxy server (`server.js`)** between the frontend client and the external API:
+
+```mermaid
+flowchart LR
+    Browser["<b>Browser (Client)</b><br/>index.html / styles.css / app.js<br/>• Renders UI & 5-day forecast grid<br/>• Stores search history & °C/°F state"]
+    Server["<b>Node.js Server (Backend)</b><br/>server.js<br/>• Reads OPENWEATHER_API_KEY<br/>from .env securely"]
+    API["<b>OpenWeatherMap API</b><br/>/weather & /forecast (v2.5)"]
+
+    Browser -- "1. GET /api/weather?q=London" --> Server
+    Server -- "2. Attaches &appid=KEY<br/>& calls OpenWeather" --> API
+    API -- "3. Returns raw JSON" --> Server
+    Server -- "4. Returns clean weather JSON<br/>(API key never exposed)" --> Browser
+```
+### How a Request Flows
+1. **Client Request:** The browser (`app.js`) requests `/api/weather` or `/api/forecast` from the local Node server with only the city name or coordinates—no API key is ever sent from the client.
+2. **Server Proxy Injection:** `server.js` intercepts the `/api/*` route, reads `OPENWEATHER_API_KEY` from the server's `.env` environment variables, and forwards the request to OpenWeatherMap.
+3. **External Response:** OpenWeatherMap validates the key and returns the weather or 5-day forecast JSON to the Node server.
+4. **Client Rendering:** `server.js` forwards the JSON response back to `app.js`, which updates the DOM, caches the location coordinates in `localStorage`, and renders the 5-day forecast grid.
+
+
 ## 🛠️ Tech Stack
 
 - **Frontend:** HTML5, CSS3 (Flexbox & CSS Grid), Vanilla JavaScript (ES6+, `async/await`, Fetch API)
