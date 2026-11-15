@@ -51,7 +51,7 @@ function showError(message) {
 
 // 4. API Fetch & Retry Logic
 async function fetchWeatherByCity(city) {
-    const url = `${BASE}?q=${encodeURIComponent(city)}&units=metric`;
+    const url = `${BASE}?q=${encodeURIComponent(city)}`;
 
     // Basic fetch; check response.ok
     const res = await fetch(url);
@@ -66,7 +66,7 @@ async function fetchWeatherByCity(city) {
 }
 
 async function fetchWeatherByCoords(lat, lon) {
-    const url = `${BASE}?lat=${lat}&lon=${lon}&units=metric`;
+    const url = `${BASE}?lat=${lat}&lon=${lon}`;
     const res = await fetch(url);
 
     if (!res.ok) {
@@ -77,7 +77,7 @@ async function fetchWeatherByCoords(lat, lon) {
 }
 
 async function fetchForecastByCoords(lat, lon) {
-    const url = `${FORECAST_BASE}?lat=${lat}&lon=${lon}&units=metric`;
+    const url = `${FORECAST_BASE}?lat=${lat}&lon=${lon}`;
     const res = await fetch(url);
 
     if (!res.ok) {
@@ -220,7 +220,6 @@ function saveSearchHistory(data) {
 function renderSearchHistory() {
     historyContainer.innerHTML = '';
 
-    //searchHistory.forEach((city) => {
     searchHistory.forEach((entry) => {
         // Safety fallback in case old string entries are still in localStorage
         if (typeof entry === 'string') return;
@@ -228,11 +227,9 @@ function renderSearchHistory() {
         const btn = document.createElement('button');
         btn.type = 'button'; // Important: prevents accidental form submission behavior
         btn.className = 'history-btn';
-        //btn.textContent = city;
         btn.textContent = entry.label;
 
         btn.addEventListener('click', () => {
-            //cityInput.value = city;
             cityInput.value = entry.label;
             //form.dispatchEvent(new Event('submit'));
             loadWeatherByCoords(entry.lat, entry.lon);

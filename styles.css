@@ -15,7 +15,6 @@ body {
     background: var(--bg);
     color: var(--text);
     display: flex;
-    align-items: center;
     justify-content: center;
     min-height: 100vh; /* Allows the page to grow and scroll when the card gets */
     padding: 1rem;
@@ -51,6 +50,11 @@ button {
     color: #fff;
     cursor: pointer;
     flex-shrink: 0; /* Keeps buttons from getting squished on narrow screens */
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .geo-btn {
