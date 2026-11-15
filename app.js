@@ -32,7 +32,8 @@ let searchHistory = JSON.parse(localStorage.getItem('weatherHistory')) || [];
 
 
 // 3. UI State Helpers
-function showLoading(show = true) {
+function showLoading(show = true, message = 'Loading...') {
+    loader.textContent = message;
     loader.classList.toggle('hidden', !show);
     if (show) {
         weatherSection.classList.add('hidden');
@@ -131,8 +132,9 @@ function updateTempDisplay() {
 
 function renderWeather(data) {
     // OpenWeather returns weather[0].description, main.temp, main.humidity, wind.speed
-    wCity.textContent = `${data.name}, ${data.sys?.country || ''}`;
-    //wTemp.textContent = `${data.main.temp.toFixed(1)}°C`;
+    const cityLabel = data.sys?.country ? `${data.name}, ${data.sys.country}` : data.name;
+    wCity.textContent = cityLabel;
+    cityInput.value = cityLabel;  // Automatically shows the detected city in the search box!
     currentTempC = data.main.temp;
     updateTempDisplay();
     wDesc.textContent = data.weather?.[0]?.description || '';
@@ -197,10 +199,6 @@ function saveSearchHistory(data) {
     const label = country ? `${data.name}, ${country}` : data.name;
     const { lat, lon } = data.coord;
     
-    // Remove the city if it already exists (case-insensitive) so we don't get duplicates
-    //searchHistory = searchHistory.filter((item) => item.toLowerCase() !== city.toLowerCase());
-    //searchHistory = searchHistory.filter((item) => item.toLowerCase() !== label.toLowerCase());
-
     // Remove duplicates by matching either the same label OR exact same coordinates
     searchHistory = searchHistory.filter(
         (item) =>
@@ -209,8 +207,6 @@ function saveSearchHistory(data) {
     );
 
     // Add the new city to the very beginning of the array
-    //searchHistory.unshift(city);
-    //searchHistory.unshift(cityLabel);
     searchHistory.unshift({ label, lat, lon });
 
     // Keep only the last 5 searched cities
@@ -308,13 +304,12 @@ geoBtn.addEventListener('click', () => {
         return;
     }
 
-    showLoading(true);
+    showLoading(true, 'Detecting location...');
     geoBtn.disabled = true; // Prevents double-clicking while waiting for GPS
 
     navigator.geolocation.getCurrentPosition(
         async (position) => {
             const { latitude, longitude } = position.coords;
-            cityInput.value = ''; // Clear any old city text from the input
             await loadWeatherByCoords(latitude, longitude);
             geoBtn.disabled = false;
         },
