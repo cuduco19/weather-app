@@ -2,6 +2,7 @@
 //const API_KEY = 'YOUR_API_KEY';// <-- Replace with your API key
 const BASE = '/api/weather';
 const FORECAST_BASE = '/api/forecast';
+const RATE_LIMIT_MSG = 'Rate limit exceeded. Too many requests—please try again later.';
 
 // 1. DOM Hooks
 const form = document.getElementById('search-form');
@@ -48,43 +49,33 @@ function showError(message) {
     forecastSection.classList.add('hidden');
 }
 
-
 // 4. API Fetch & Retry Logic
+async function handleApiResponse(res) {
+    if (!res.ok) {
+        if (res.status === 404) throw new Error('City not found');
+        if (res.status === 429) throw new Error(RATE_LIMIT_MSG);
+        throw new Error(`Server error: ${res.status}`);
+    }
+    return res.json();
+}
+
 async function fetchWeatherByCity(city) {
     const url = `${BASE}?q=${encodeURIComponent(city)}`;
 
-    // Basic fetch; check response.ok
     const res = await fetch(url);
-
-    if(!res.ok){
-        if(res.status === 404)
-            throw new Error('City not found');
-        throw new Error(`Server error:${res.status}`);
-    }
-
-    return res.json();
+    return handleApiResponse(res);
 }
 
 async function fetchWeatherByCoords(lat, lon) {
     const url = `${BASE}?lat=${lat}&lon=${lon}`;
     const res = await fetch(url);
-
-    if (!res.ok) {
-        throw new Error(`Server error: ${res.status}`);
-    }
-
-    return res.json();
+    return handleApiResponse(res);
 }
 
 async function fetchForecastByCoords(lat, lon) {
     const url = `${FORECAST_BASE}?lat=${lat}&lon=${lon}`;
     const res = await fetch(url);
-
-    if (!res.ok) {
-        throw new Error(`Server error: ${res.status}`);
-    }
-
-    return res.json();
+    return handleApiResponse(res);
 }
 
 
@@ -99,8 +90,12 @@ async function fetchWithRetry(fetchFn, retries = 2, backoffMs = 500) {
         try {
             return await fetchFn();
         } catch (err) {
-            // Do NOT retry if the city doesn't exist (404) or API key is invalid (401)
-            if (err.message === 'City not found' || err.message.includes('401')) {
+            // Do NOT retry 404 (not found), 429 (rate limit), or 401 (unauthorized)
+            if (
+                err.message === 'City not found' ||
+                err.message === RATE_LIMIT_MSG ||
+                err.message.includes('401')
+            ) {
                 throw err;
             }
 

@@ -15,11 +15,25 @@ const MIME_TYPES = {
     '.ico': 'image/x-icon'
 };
 
+let requestTimestamps = [];
+const WINDOW_MS = 60 * 1000; // 1 minute
+const MAX_REQUESTS = 30; // Allows 15 searches per minute (2 calls per search)
+
 const server = http.createServer(async (req, res) => {
     const reqUrl = new URL(req.url, `http://${req.headers.host}`);
-
     // 1. Handle API Proxy Routes (/api/weather or /api/forecast)
     if (reqUrl.pathname === '/api/weather' || reqUrl.pathname === '/api/forecast') {
+        // Rate limit check (returns 429 if exceeded)
+        const now = Date.now();
+        requestTimestamps = requestTimestamps.filter((timestamp) => now - timestamp < WINDOW_MS);
+        
+        if (requestTimestamps.length >= MAX_REQUESTS) {
+            res.writeHead(429, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ message: 'Too many requests. Please try again later.' }));
+        }
+        
+        requestTimestamps.push(now);
+
         if (!API_KEY) {
             res.writeHead(500, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Server missing OPENWEATHER_API_KEY' }));
