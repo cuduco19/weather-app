@@ -1,0 +1,44 @@
+.forecast {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.forecast h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    color: #334155;
+}
+
+.forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+    gap: 0.5rem;
+}
+
+.forecast-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.6rem 0.4rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.forecast-day {
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.forecast-card img {
+    width: 40px;
+    height: 40px;
+}
+
+.forecast-temp {
+    font-weight: 700;
+    font-size: 0.9rem;
+}
