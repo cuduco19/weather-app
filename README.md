@@ -4,7 +4,7 @@ A responsive, full-stack weather dashboard built with HTML5, modular CSS3, Vanil
 
 ## Live Demo
 
-- **Live Site:** [https://evancru-weather-app.netlify.app](https://evancru-weather-app.netlify.app) *(Update with your Netlify URL)*
+- **Live Site:** [https://evancru-weather-app.netlify.app](https://evancru-weather-app.netlify.app)
 
 ## Key Features
 
