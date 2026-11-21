@@ -67,7 +67,14 @@ const server = http.createServer(async (req, res) => {
         return res.end('Forbidden');
     }
 
-    const filePath = path.join(__dirname, reqUrl.pathname === '/' ? 'index.html' : reqUrl.pathname);
+    const safeRoot = path.resolve(__dirname);
+    const filePath = path.resolve(safeRoot, reqUrl.pathname === '/' ? 'index.html' : `.${reqUrl.pathname}`);
+
+    if (filePath !== safeRoot && !filePath.startsWith(safeRoot + path.sep)) {
+        res.writeHead(403);
+        return res.end('Forbidden');
+    }
+
     const ext = path.extname(filePath);
 
     fs.readFile(filePath, (err, content) => {

@@ -1,0 +1,14 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "description": "A responsive, full-stack weather dashboard built with **HTML5, CSS3, Vanilla JavaScript, and a lightweight Node.js proxy server** using the [OpenWeatherMap API](https://openweathermap.org). Users can search for any city worldwide, detect their local weather via GPS, switch seamlessly between Celsius and Fahrenheit, and revisit recent locations stored locally in the browser—all while keeping the API key securely hidden on the server.",
+  "scripts": {
+    "build": "esbuild styles/main.css --bundle --minify --external:*.webp --outfile=dist/styles/main.min.css && esbuild scripts/main.js --bundle --minify --outfile=dist/scripts/main.min.js"
+  },
+  "keywords": [],
+  "author": "Eliot Cuduco",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

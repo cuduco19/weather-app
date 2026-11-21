@@ -1,0 +1,16 @@
+[build]
+  command = "npm run build"
+  publish = "."
+
+[functions]
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/api/weather"
+  to = "/.netlify/functions/weather?type=weather"
+  status = 200
+
+[[redirects]]
+  from = "/api/forecast"
+  to = "/.netlify/functions/weather?type=forecast"
+  status = 200
