@@ -32,7 +32,10 @@ export async function handler(event) {
 
     // 3. Forward query params (q, lat, lon) and enforce metric + secret API key
     const params = event.queryStringParameters || {};
-    const endpoint = params.type === 'forecast' ? 'forecast' : 'weather';
+    const endpoint = event.path?.endsWith('/forecast') || params.type === 'forecast'
+        ? 'forecast'
+        : 'weather';
+
     const forwardUrl = new URL(`${OW_BASE}/${endpoint}`);
 
     Object.entries(params).forEach(([key, value]) => {

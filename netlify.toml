@@ -7,10 +7,10 @@
 
 [[redirects]]
   from = "/api/weather"
-  to = "/.netlify/functions/weather?type=weather"
+  to = "/.netlify/functions/weather/weather"
   status = 200
 
 [[redirects]]
   from = "/api/forecast"
-  to = "/.netlify/functions/weather?type=forecast"
+  to = "/.netlify/functions/weather/forecast"
   status = 200
