@@ -1,5 +1,5 @@
 // netlify/functions/weather.js
-const OW_BASE = 'https://openweathermap.org';
+const OW_BASE = 'https://api.openweathermap.org/data/2.5';
 
 let requestTimestamps = [];
 const WINDOW_MS = 60 * 1000; // 1 minute
