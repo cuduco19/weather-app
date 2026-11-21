@@ -55,7 +55,7 @@ export function renderWeather(data, isCelsius) {
 
     const iconCode = data.weather?.[0]?.icon;
     if (iconCode) {
-        wIcon.src = `https://openweathermap.org{iconCode}.png`;
+        wIcon.src = `https://openweathermap.org/payload/api/media/file/${iconCode}.png`;
         wIcon.alt = data.weather?.[0]?.description || 'Weather icon';
         wIcon.classList.remove('hidden');
     } else {
@@ -91,10 +91,10 @@ export function renderForecast(forecastList, isCelsius) {
         card.className = 'forecast-card';
         card.innerHTML = `
             <span class="forecast-day">${dayName}</span>
-            ${iconCode ? `<img src="https://openweathermap.org{iconCode}.png" alt="${desc}" width="40" height="40" />` : ''}
+            ${iconCode ? `<img src="https://openweathermap.org/payload/api/media/file/${iconCode}.png" alt="${desc}" width="40" height="40" />` : ''}
             <span class="forecast-temp">${displayTemp}</span>
         `;
-
+        
         forecastGrid.appendChild(card);
     });
 
