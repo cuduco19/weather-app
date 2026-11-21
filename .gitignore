@@ -1,4 +1,12 @@
+# Dependencies
+node_modules/
+
+# OS & Google Drive sync junk files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor & logs
+.vscode/
 .env
-.env.*
-!.env.example
-config.js
+*.log
