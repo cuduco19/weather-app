@@ -4,7 +4,7 @@ A responsive, full-stack weather dashboard built with HTML5, modular CSS3, Vanil
 
 ## Live Demo
 
-- **Live Site:** [https://netlify.app](https://netlify.app)
+- **Live Site:** [https://evancru-weather-app.netlify.app](https://evancru-weather-app.netlify.app)
 
 ## Key Features
 
@@ -54,7 +54,7 @@ weather-app/
 
 1. **Clone & Install:**
    ```bash
-   git clone https://github.com
+   git clone https://github.com/cuduco19/weather-app.git
    cd weather-app
    npm install
    ```
